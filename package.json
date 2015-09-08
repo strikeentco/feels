@@ -1,0 +1,41 @@
+{
+  "name": "feels",
+  "author": "Alexey Bystrov <strikeentco@gmail.com>",
+  "version": "1.0.0",
+  "description": "Feels allow you to calculate apparent temperature using heat index, approximate wet-bulb globe temperature, humidex, australian apparent temperature and wind chill.",
+  "keywords": [
+    "humidex",
+    "wind chill",
+    "heat index",
+    "wind",
+    "chill",
+    "heat",
+    "index",
+    "wbgt",
+    "aat",
+    "feels like",
+    "comfort",
+    "temperature",
+    "apparent",
+    "humidity",
+    "dew point",
+    "frost point"
+  ],
+  "main": "./main.js",
+  "scripts": {
+    "test": "mocha test",
+    "test-on-travis": "istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/strikeentco/feels.git"
+  },
+  "bugs": {
+    "url": "https://github.com/strikeentco/feels/issues"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "should": "^7.0.4"
+  },
+  "license": "MIT"
+}
