@@ -5,7 +5,6 @@ var isNil = helpers.isNil;
 var unitsFormat = helpers.unitsFormat;
 var tempConvert = helpers.tempConvert;
 var speedConvert = helpers.speedConvert;
-var getG = helpers.getG;
 var getT = helpers.getT;
 var _methods = helpers.methods;
 
@@ -29,30 +28,29 @@ function Feels(opts) {
   };
 }
 
-Feels.prototype.like = function(methods) {
+Feels.prototype.like = function (methods) {
   var temp = tempConvert(this.temp, this.units.temp, 'c');
   if ((Array.isArray(methods) || typeof methods === 'string') && methods.length) {
     if (typeof methods === 'string') {
       if (_methods[methods.toUpperCase()]) {
         return this[_methods[methods.toUpperCase()].f]();
       } else {
-        throw new Error('Methods must be one of: HI, HI_CA, AAT, WCI');
+        throw new RangeError('Methods must be one of: HI, HI_CA, AAT, WCI');
       }
     } else {
-      var _this = this;
       var like = 0;
       var count = 0;
 
       methods.forEach(function(n) {
         if (_methods[n.toUpperCase()]) {
           try {
-            like += _this[_methods[n.toUpperCase()].f]();
+            like += this[_methods[n.toUpperCase()].f]();
             count++;
           } catch (e) { }
         } else {
-          throw new Error('Methods must be one of: HI, HI_CA, AAT, WCI');
+          throw new RangeError('Methods must be one of: HI, HI_CA, AAT, WCI');
         }
-      });
+      }.bind(this));
 
       if (count === 0) throw new Error('No valid methods for these values');
       return like / count;
@@ -68,39 +66,39 @@ Feels.prototype.like = function(methods) {
   }
 };
 
-Feels.prototype.toCelsius = function() {
+Feels.prototype.toCelsius = function () {
   this._units.temp = 'c';
   return this;
 };
 
 Feels.prototype.toC = Feels.prototype.toCelsius;
 
-Feels.prototype.toFahrenheit = function() {
+Feels.prototype.toFahrenheit = function () {
   this._units.temp = 'f';
   return this;
 };
 
 Feels.prototype.toF = Feels.prototype.toFahrenheit;
 
-Feels.prototype.toKelvin = function() {
+Feels.prototype.toKelvin = function () {
   this._units.temp = 'k';
   return this;
 };
 
 Feels.prototype.toK = Feels.prototype.toKelvin;
 
-Feels.prototype.heatIndex = function(temp, humidity, dewPoint) { //HI
+Feels.prototype.heatIndex = function (temp, humidity, dewPoint) { //HI
   if (
     (!isNil(temp) || !isNil(this.temp)) &&
     (!isNil(humidity) || !isNil(this.humidity) || !isNil(this.dewPoint))
   ) {
     !isNil(temp) || (temp = this.temp);
-    var units = this.units || {temp: 'c'};
-    var _units = this._units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
+    var _units = this._units || { temp: 'c' };
     var _temp = tempConvert(temp, units.temp, 'f');
 
     if (_temp < 68) {
-      throw new Error('Heat Index temp must be >= (20C, 68F, 293.15K)');
+      throw new RangeError('Heat Index temp must be >= (20C, 68F, 293.15K)');
     }
 
     if (dewPoint || !isNil(this.dewPoint)) {
@@ -109,7 +107,7 @@ Feels.prototype.heatIndex = function(temp, humidity, dewPoint) { //HI
     } else {
       !isNil(humidity) || (humidity = this.humidity);
       if (humidity < 0 || humidity > 100) {
-        throw new Error('Humidity must be in [0, 100]');
+        throw new RangeError('Humidity must be in [0, 100]');
       }
     }
 
@@ -118,8 +116,6 @@ Feels.prototype.heatIndex = function(temp, humidity, dewPoint) { //HI
       Math.pow(_temp, 2) * Math.pow(humidity, 2) - 3.8646 * Math.pow(10, -5) * Math.pow(_temp, 3) + 2.91583 * Math.pow(10, -5) * Math.pow(humidity, 3) + 1.42721 * Math.pow(10, -6) *
       Math.pow(_temp, 3) * humidity + 1.97483 * Math.pow(10, -7) * _temp * Math.pow(humidity, 3) - 2.18429 * Math.pow(10, -8) * Math.pow(_temp, 3) * Math.pow(humidity, 2) +
       8.43296 * Math.pow(10, -10) * Math.pow(_temp, 2) * Math.pow(humidity, 3) - 4.81975 * Math.pow(10, -11) * Math.pow(_temp, 3) * Math.pow(humidity, 3);
-    /*return 0.363445176 + 0.988622465 * temp + 4.777114035 * humidity - 0.114037667 * temp * humidity - 0.000850208 *  Math.pow(temp, 2) - 0.020716198 *
-      Math.pow(humidity, 2) + 0.000687678 * Math.pow(temp, 2) * humidity + 0.000274954 * temp * Math.pow(humidity, 2);*/
 
     return tempConvert(HI, 'f', _units.temp);
   } else {
@@ -129,18 +125,18 @@ Feels.prototype.heatIndex = function(temp, humidity, dewPoint) { //HI
 
 module.exports.heatIndex = Feels.prototype.heatIndex.bind(module.exports);
 
-Feels.prototype.AWBGT = function(temp, humidity, dewPoint) { //AWBGT
+Feels.prototype.AWBGT = function (temp, humidity, dewPoint) { //AWBGT
   if (
     (!isNil(temp) || !isNil(this.temp)) &&
     (!isNil(humidity) || !isNil(this.humidity) || !isNil(this.dewPoint))
   ) {
     !isNil(temp) || (temp = this.temp);
-    var units = this.units || {temp: 'c'};
-    var _units = this._units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
+    var _units = this._units || { temp: 'c' };
     var _temp = tempConvert(temp, units.temp, 'c');
 
     if (_temp < 15) {
-      throw new Error('Heat Index temp must be >= (15C, 59F, 288.15K)');
+      throw new RangeError('Heat Index temp must be >= (15C, 59F, 288.15K)');
     }
 
     if (dewPoint || !isNil(this.dewPoint)) {
@@ -149,7 +145,7 @@ Feels.prototype.AWBGT = function(temp, humidity, dewPoint) { //AWBGT
     } else {
       !isNil(humidity) || (humidity = this.humidity);
       if (humidity < 0 || humidity > 100) {
-        throw new Error('Humidity must be in [0, 100]');
+        throw new RangeError('Humidity must be in [0, 100]');
       }
     }
 
@@ -161,18 +157,18 @@ Feels.prototype.AWBGT = function(temp, humidity, dewPoint) { //AWBGT
 
 module.exports.AWBGT = Feels.prototype.AWBGT.bind(module.exports);
 
-Feels.prototype.humidex = function(temp, humidity, dewPoint) { //HI_CA
+Feels.prototype.humidex = function (temp, humidity, dewPoint) { //HI_CA
   if (
     (!isNil(temp) || !isNil(this.temp)) &&
     (!isNil(humidity) || !isNil(this.humidity) || !isNil(this.dewPoint))
   ) {
     !isNil(temp) || (temp = this.temp);
-    var units = this.units || {temp: 'c'};
-    var _units = this._units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
+    var _units = this._units || { temp: 'c' };
     var _temp = tempConvert(temp, units.temp, 'c');
 
     if (_temp <= 0) {
-      throw new Error('Humidex temp must be > (0C, 32F, 273.15K)');
+      throw new RangeError('Humidex temp must be > (0C, 32F, 273.15K)');
     }
 
     if (dewPoint || !isNil(this.dewPoint)) {
@@ -181,7 +177,7 @@ Feels.prototype.humidex = function(temp, humidity, dewPoint) { //HI_CA
     } else {
       !isNil(humidity) || (humidity = this.humidity);
       if (humidity < 0 || humidity > 100) {
-        throw new Error('Humidity must be in [0, 100]');
+        throw new RangeError('Humidity must be in [0, 100]');
       }
     }
 
@@ -193,13 +189,13 @@ Feels.prototype.humidex = function(temp, humidity, dewPoint) { //HI_CA
 
 module.exports.humidex = Feels.prototype.humidex.bind(module.exports);
 
-Feels.prototype.AAT = function(temp, speed, humidity, dewPoint) { //AAT
+Feels.prototype.AAT = function (temp, speed, humidity, dewPoint) { //AAT
   if (
     ((!isNil(temp) && !isNil(speed)) || (!isNil(this.temp) && !isNil(this.speed))) &&
     (!isNil(humidity) || !isNil(this.humidity) || !isNil(this.dewPoint))
   ) {
-    var units = this.units || {temp: 'c', speed: 'mps'};
-    var _units = this._units || {temp: 'c'};
+    var units = this.units || { temp: 'c', speed: 'mps' };
+    var _units = this._units || { temp: 'c' };
 
     if (isNil(temp) && isNil(speed)) {
       temp = this.temp;
@@ -210,7 +206,7 @@ Feels.prototype.AAT = function(temp, speed, humidity, dewPoint) { //AAT
     speed = speedConvert(speed, units.speed, 'mps');
 
     if (speed < 0) {
-      throw new Error('Wind speed must be >= 0');
+      throw new RangeError('Wind speed must be >= 0');
     }
 
     if (dewPoint || !isNil(this.dewPoint)) {
@@ -219,7 +215,7 @@ Feels.prototype.AAT = function(temp, speed, humidity, dewPoint) { //AAT
     } else {
       !isNil(humidity) || (humidity = this.humidity);
       if (humidity < 0 || humidity > 100) {
-        throw new Error('Humidity must be in [0, 100]');
+        throw new RangeError('Humidity must be in [0, 100]');
       }
     }
 
@@ -231,10 +227,10 @@ Feels.prototype.AAT = function(temp, speed, humidity, dewPoint) { //AAT
 
 module.exports.AAT = Feels.prototype.AAT.bind(module.exports);
 
-Feels.prototype.windChill = function(temp, speed) { //WCI
+Feels.prototype.windChill = function (temp, speed) { //WCI
   if ((!isNil(temp) && !isNil(speed)) || (!isNil(this.temp) && !isNil(this.speed))) {
-    var units = this.units || {temp: 'c', speed: 'mps'};
-    var _units = this._units || {temp: 'c'};
+    var units = this.units || { temp: 'c', speed: 'mps' };
+    var _units = this._units || { temp: 'c' };
     if (isNil(temp) && isNil(speed)) {
       temp = this.temp;
       speed = this.speed;
@@ -243,9 +239,9 @@ Feels.prototype.windChill = function(temp, speed) { //WCI
     var _temp = tempConvert(temp, units.temp, 'c');
 
     if (_temp > 0) {
-      throw new Error('Wind Chill temp must be <= (0C, 32F, 273.15K)');
+      throw new RangeError('Wind Chill temp must be <= (0C, 32F, 273.15K)');
     } else if (speed < 0) {
-      throw new Error('Wind speed must be >= 0');
+      throw new RangeError('Wind speed must be >= 0');
     }
 
     speed = speedConvert(speed, units.speed, 'kph');
@@ -261,9 +257,9 @@ Feels.prototype.windChill = function(temp, speed) { //WCI
 
 module.exports.windChill = Feels.prototype.windChill.bind(module.exports);
 
-Feels.prototype.getWaterVapourPressure = function(humidity, temp) {
+Feels.prototype.getWaterVapourPressure = function (humidity, temp) {
   if ((!isNil(humidity) && !isNil(temp)) || (!isNil(this.humidity) && !isNil(this.temp))) {
-    var units = this.units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
     if (isNil(temp) && isNil(humidity)) {
       temp = this.temp;
       humidity = this.humidity;
@@ -280,7 +276,7 @@ Feels.prototype.getWaterVapourPressure = function(humidity, temp) {
 Feels.prototype.getWVP = Feels.prototype.getWaterVapourPressure;
 module.exports.getWVP = Feels.prototype.getWVP.bind(module.exports);
 
-Feels.prototype.getWaterVapourPressureByDewPoint = function(dewPoint) {
+Feels.prototype.getWaterVapourPressureByDewPoint = function (dewPoint) {
   if (!isNil(dewPoint) || !isNil(this.dewPoint)) {
     !isNil(dewPoint) || (dewPoint = this.dewPoint);
 
@@ -293,9 +289,9 @@ Feels.prototype.getWaterVapourPressureByDewPoint = function(dewPoint) {
 Feels.prototype.getWVPbyDP = Feels.prototype.getWaterVapourPressureByDewPoint;
 module.exports.getWVPbyDP = Feels.prototype.getWVPbyDP.bind(module.exports);
 
-Feels.prototype.getAproximateRelativeHumidity = function(temp, dewPoint) {
+Feels.prototype.getAproximateRelativeHumidity = function (temp, dewPoint) {
   if ((!isNil(temp) && !isNil(dewPoint)) || (!isNil(this.temp) && !isNil(this.dewPoint))) {
-    var units = this.units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
     if (isNil(temp) && isNil(dewPoint)) {
       temp = this.temp;
       dewPoint = this.dewPoint;
@@ -310,11 +306,11 @@ Feels.prototype.getAproximateRelativeHumidity = function(temp, dewPoint) {
 Feels.prototype.getARH = Feels.prototype.getAproximateRelativeHumidity;
 module.exports.getARH = Feels.prototype.getARH.bind(module.exports);
 
-Feels.prototype.getRelativeHumidity = function(temp, WVP, dewPoint) {
+Feels.prototype.getRelativeHumidity = function (temp, WVP, dewPoint) {
   if (this.humidity) {
     return this.humidity;
   } else if ((!isNil(temp) || !isNil(this.temp)) && (!isNil(WVP) || !isNil(this.dewPoint))) {
-    var units = this.units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
     !isNil(temp) || (temp = this.temp);
     var _temp = tempConvert(temp, units.temp, 'c');
 
@@ -322,7 +318,7 @@ Feels.prototype.getRelativeHumidity = function(temp, WVP, dewPoint) {
       !isNil(WVP) || (WVP = this.dewPoint);
       dewPoint = true;
     } else if (typeof WVP !== 'number') {
-      throw new Error('WVP must be a number');
+      throw new TypeError('WVP must be a number');
     }
 
     return (((dewPoint) ? this.getWVPbyDP(WVP) : WVP) / (6.105 * Math.exp((17.27 * _temp) / (237.7 + _temp)))) * 100;
@@ -334,9 +330,9 @@ Feels.prototype.getRelativeHumidity = function(temp, WVP, dewPoint) {
 Feels.prototype.getRH = Feels.prototype.getRelativeHumidity;
 module.exports.getRH = Feels.prototype.getRH.bind(module.exports);
 
-Feels.prototype.getAproximateDewPoint = function(temp, humidity) {
+Feels.prototype.getAproximateDewPoint = function (temp, humidity) {
   if ((!isNil(temp) && !isNil(humidity)) || (!isNil(this.temp) && !isNil(this.humidity))) {
-    var units = this.units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
     if (isNil(temp) && isNil(humidity)) {
       temp = this.temp;
       humidity = this.humidity;
@@ -351,12 +347,12 @@ Feels.prototype.getAproximateDewPoint = function(temp, humidity) {
 Feels.prototype.getADP = Feels.prototype.getAproximateDewPoint;
 module.exports.getADP = Feels.prototype.getADP.bind(module.exports);
 
-Feels.prototype.getDewPoint = function(temp, humidity) { //dew point for [-40, 50], humidity must be in (0, 100]
+Feels.prototype.getDewPoint = function (temp, humidity) { //dew point for [-40, 50], humidity must be in (0, 100]
   if (this.dewPoint) {
     return this.dewPoint;
   } else if ((!isNil(temp) && !isNil(humidity)) || (!isNil(this.temp) && !isNil(this.humidity))) {
-    var units = this.units || {temp: 'c'};
-    var _units = this._units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
+    var _units = this._units || { temp: 'c' };
     if (isNil(temp) && isNil(humidity)) {
       temp = this.temp;
       humidity = this.humidity;
@@ -365,9 +361,9 @@ Feels.prototype.getDewPoint = function(temp, humidity) { //dew point for [-40, 5
     var _temp = tempConvert(temp, units.temp, 'c');
 
     if (_temp < -40 || _temp > 50) {
-      throw new Error('Dew point temp must be in [-40, 50]');
+      throw new RangeError('Dew point temp must be in [-40, 50]');
     } else if (humidity <= 0 || humidity > 100) {
-      throw new Error('Humidity must be in (0, 100]');
+      throw new RangeError('Humidity must be in (0, 100]');
     }
 
     var b = 18.729;
@@ -382,10 +378,10 @@ Feels.prototype.getDewPoint = function(temp, humidity) { //dew point for [-40, 5
 Feels.prototype.getDP = Feels.prototype.getDewPoint;
 module.exports.getDP = Feels.prototype.getDP.bind(module.exports);
 
-Feels.prototype.getFrostPoint = function(temp, humidity) { //frost point for [-80, 0], humidity must be in (0, 100]
+Feels.prototype.getFrostPoint = function (temp, humidity) { //frost point for [-80, 0], humidity must be in (0, 100]
   if ((!isNil(temp) && !isNil(humidity)) || (!isNil(this.temp) && !isNil(this.humidity))) {
-    var units = this.units || {temp: 'c'};
-    var _units = this._units || {temp: 'c'};
+    var units = this.units || { temp: 'c' };
+    var _units = this._units || { temp: 'c' };
     if (isNil(temp) && isNil(humidity)) {
       temp = this.temp;
       humidity = this.humidity;
@@ -394,9 +390,9 @@ Feels.prototype.getFrostPoint = function(temp, humidity) { //frost point for [-8
     var _temp = tempConvert(temp, units.temp, 'c');
 
     if (_temp < -80 || _temp > 0) {
-      throw new Error('Frost point temp must be in [-80, 0]');
+      throw new RangeError('Frost point temp must be in [-80, 0]');
     } else if (humidity <= 0 || humidity > 100) {
-      throw new Error('Humidity must be in (0, 100]');
+      throw new RangeError('Humidity must be in (0, 100]');
     }
 
     var b = 23.036;

@@ -1,7 +1,7 @@
 {
   "name": "feels",
   "author": "Alexey Bystrov <strikeentco@gmail.com>",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Feels allow you to calculate apparent temperature using heat index, approximate wet-bulb globe temperature, humidex, australian apparent temperature and wind chill.",
   "keywords": [
     "humidex",
@@ -34,8 +34,8 @@
     "url": "https://github.com/strikeentco/feels/issues"
   },
   "devDependencies": {
-    "mocha": "^2.2.5",
-    "should": "^7.0.4"
+    "mocha": "^2.5.3",
+    "should": "^10.0.0"
   },
   "license": "MIT"
 }

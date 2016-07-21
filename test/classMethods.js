@@ -234,6 +234,10 @@ describe('Feels()', function() {
       });
 
       it('should throw if no valid method exists', function() {
+        should(function() {return feels.like(['WCI']);}).throw('No valid methods for these values');
+      });
+
+      it('should throw', function() {
         should(function() {return feels.like('WCI');}).throw('Wind Chill temp must be <= (0C, 32F, 273.15K)');
       });
 

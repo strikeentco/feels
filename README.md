@@ -1,17 +1,17 @@
-feels
+feels [![License](https://img.shields.io/github/license/strikeentco/feels.svg?style=flat)](https://github.com/strikeentco/feels/blob/master/LICENSE)  [![npm](https://img.shields.io/npm/v/feels.svg?style=flat)](https://www.npmjs.com/package/feels)
 ==========
-[![Build Status](https://travis-ci.org/strikeentco/feels.svg)](https://travis-ci.org/strikeentco/feels) [![License](https://img.shields.io/github/license/strikeentco/feels.svg?style=flat)](https://github.com/strikeentco/feels/blob/master/LICENSE)  [![npm](https://img.shields.io/npm/v/feels.svg?style=flat)](https://www.npmjs.com/package/feels) [![Test Coverage](https://codeclimate.com/github/strikeentco/feels/badges/coverage.svg)](https://codeclimate.com/github/strikeentco/feels/coverage) [![bitHound Score](https://www.bithound.io/github/strikeentco/feels/badges/score.svg)](https://www.bithound.io/github/strikeentco/feels)
+[![Build Status](https://travis-ci.org/strikeentco/feels.svg)](https://travis-ci.org/strikeentco/feels)  [![Test Coverage](https://codeclimate.com/github/strikeentco/feels/badges/coverage.svg)](https://codeclimate.com/github/strikeentco/feels/coverage) [![bitHound Score](https://www.bithound.io/github/strikeentco/feels/badges/score.svg)](https://www.bithound.io/github/strikeentco/feels)
 
 `Feels` allow you to calculate [apparent temperature](https://en.wikipedia.org/wiki/Apparent_temperature) using [heat index](https://en.wikipedia.org/wiki/Heat_index), approximate [wet-bulb globe temperature](https://en.wikipedia.org/wiki/Wet-bulb_globe_temperature), [humidex](https://en.wikipedia.org/wiki/Humidex), [australian apparent temperature](https://en.wikipedia.org/wiki/Wind_chill#Australian_Apparent_Temperature) and [wind chill](https://en.wikipedia.org/wiki/Wind_chill).
 
-Combinations of this methods also named as Feels like, Real feel etc.
+Combinations of this methods also named as `Feels like`, `Real feel` etc.
 
-You can also calculate relative humidity, dew point, frost point, water vapour pressure using [class](#class-methods) or [standalone](#standalone-methods) methods.
+You can also calculate `relative humidity`, `dew point`, `frost point`, `water vapour pressure` using [class](#class-methods) or [standalone](#standalone-methods) methods.
 
 # Usage
 
 ```sh
-npm install feels
+$ npm install feels --save
 ```
 
 ```javascript
@@ -56,7 +56,7 @@ console.log(Feels({temp: 20, humidity: 80.9}).toF().humidex());
 
 ### Feels().like([options])
 
-If options aren't provided returns an index is calculated with ['HI', 'HI_CA', 'AAT', 'WCI'].
+If options aren't provided returns an index is calculated with `['HI', 'HI_CA', 'AAT', 'WCI']`.
 
 #### Params:
 * **options** (*String|Array*) - String or array with one of the apparent temperature [acronyms](#acronyms).
@@ -315,4 +315,4 @@ Wind chill is the perceived decrease in air temperature felt by the body on expo
 ## License
 
 The MIT License (MIT)<br/>
-Copyright (c) 2015 Alexey Bystrov
+Copyright (c) 2015-2016 Alexey Bystrov
