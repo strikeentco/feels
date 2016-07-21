@@ -229,8 +229,12 @@ describe('Feels()', function() {
         should(feels.like(['HI', 'HI_CA'])).be.approximately(22.51, 0.01);
       });
 
-      it('should throw', function() {
-        should(function() {return feels.like(['AAT', 'WCI']);}).throw('Wind Chill temp must be <= (0C, 32F, 273.15K)');
+      it('should ignore invalid algorithm / value combinations', function() {
+        should(feels.like(['AAT', 'WCI'])).be.equal(feels.like(['AAT']));
+      });
+
+      it('should throw if no valid method exists', function() {
+        should(function() {return feels.like('WCI');}).throw('Wind Chill temp must be <= (0C, 32F, 273.15K)');
       });
 
       it('should throw', function() {

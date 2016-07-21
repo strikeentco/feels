@@ -41,16 +41,21 @@ Feels.prototype.like = function(methods) {
     } else {
       var _this = this;
       var like = 0;
+      var count = 0;
 
       methods.forEach(function(n) {
         if (_methods[n.toUpperCase()]) {
-          like += _this[_methods[n.toUpperCase()].f]();
+          try {
+            like += _this[_methods[n.toUpperCase()].f]();
+            count++;
+          } catch (e) { }
         } else {
           throw new Error('Methods must be one of: HI, HI_CA, AAT, WCI');
         }
       });
 
-      return like / methods.length;
+      if (count === 0) throw new Error('No valid methods for these values');
+      return like / count;
     }
   } else {
     if (temp <= 0) {
