@@ -1,8 +1,11 @@
 {
   "name": "feels",
   "author": "Alexey Bystrov <strikeentco@gmail.com>",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Feels allow you to calculate apparent temperature using heat index, approximate wet-bulb globe temperature, humidex, australian apparent temperature and wind chill.",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "keywords": [
     "humidex",
     "wind chill",
@@ -14,16 +17,26 @@
     "wbgt",
     "aat",
     "feels like",
+    "real feel",
     "comfort",
     "temperature",
+    "speed",
+    "convert",
     "apparent",
     "humidity",
     "dew point",
     "frost point"
   ],
   "main": "./main.js",
+  "files": [
+    "lib",
+    "main.js"
+  ],
   "scripts": {
     "test": "mocha test",
+    "lint": "eslint main.js lib/**",
+    "check": "npm run lint && npm run test",
+    "cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
     "test-on-travis": "istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha"
   },
   "repository": {
@@ -34,7 +47,12 @@
     "url": "https://github.com/strikeentco/feels/issues"
   },
   "devDependencies": {
-    "mocha": "^2.5.3",
+    "eslint": "^2.13.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.11.0",
+    "eslint-plugin-jsx-a11y": "^1.2.0",
+    "eslint-plugin-react": "^5.1.1",
+    "mocha": "^3.0.1",
     "should": "^10.0.0"
   },
   "license": "MIT"
