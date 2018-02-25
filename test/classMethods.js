@@ -11,8 +11,16 @@ describe('Feels() - class methods', () => {
       should(new Feels({ temp: 20, dewPoint: 18 }).heatIndex()).be.approximately(24.12, 0.01);
     });
 
+    it('should be equal 24', () => {
+      should(new Feels({ temp: 20, dewPoint: 18, round: true }).heatIndex()).be.eql(24);
+    });
+
     it('should be approximately 19.03', () => {
       should(new Feels({ temp: 20, humidity: 10 }).heatIndex()).be.approximately(19.03, 0.01);
+    });
+
+    it('should be equal 19', () => {
+      should(new Feels({ temp: 20, humidity: 10, round: Math.floor }).heatIndex()).be.eql(19);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -38,8 +46,16 @@ describe('Feels() - class methods', () => {
       should(new Feels({ temp: 20, dewPoint: 18 }).AWBGT()).be.approximately(23.45, 0.01);
     });
 
+    it('should be equal 23', () => {
+      should(new Feels({ temp: 20, dewPoint: 18, round: true }).AWBGT()).be.eql(23);
+    });
+
     it('should be approximately 16.19', () => {
       should(new Feels({ temp: 20, humidity: 10 }).AWBGT()).be.approximately(16.19, 0.01);
+    });
+
+    it('should be equal 16', () => {
+      should(new Feels({ temp: 20, humidity: 10, round: Math.floor }).AWBGT()).be.eql(16);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -65,8 +81,16 @@ describe('Feels() - class methods', () => {
       should(new Feels({ temp: 20, dewPoint: 18 }).humidex()).be.approximately(26, 0.01);
     });
 
+    it('should be equal 26', () => {
+      should(new Feels({ temp: 20, dewPoint: 18, round: true }).humidex()).be.eql(26);
+    });
+
     it('should be approximately 15.74', () => {
       should(new Feels({ temp: 20, humidity: 10 }).humidex()).be.approximately(15.74, 0.01);
+    });
+
+    it('should be equal 15', () => {
+      should(new Feels({ temp: 20, humidity: 10, round: Math.floor }).humidex()).be.eql(15);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -92,14 +116,26 @@ describe('Feels() - class methods', () => {
       should(new Feels({ temp: 20, dewPoint: 18 }).AAT()).be.approximately(22.86, 0.01);
     });
 
+    it('should be equal 23', () => {
+      should(new Feels({ temp: 20, dewPoint: 18, round: true }).AAT()).be.eql(23);
+    });
+
     it('should be approximately 16.76', () => {
       should(new Feels({ temp: 20, humidity: 10 }).AAT()).be.approximately(16.76, 0.01);
     });
 
+    it('should be equal 16', () => {
+      should(new Feels({ temp: 20, humidity: 10, round: Math.floor }).AAT()).be.eql(16);
+    });
+
     it('should be approximately 13.27', () => {
       should(new Feels({ temp: 20, speed: 5, humidity: 10 }).AAT()).be.approximately(13.27, 0.01);
-      should(new Feels({ temp: 20, speed: 18, humidity: 10, units: { speed: 'kph' } }).AAT()).be.approximately(13.27, 0.01);
-      should(new Feels({ temp: 20, speed: 11.1847, humidity: 10, units: { speed: 'mph' } }).AAT()).be.approximately(13.27, 0.01);
+      should(new Feels({
+        temp: 20, speed: 18, humidity: 10, units: { speed: 'kph' }
+      }).AAT()).be.approximately(13.27, 0.01);
+      should(new Feels({
+        temp: 20, speed: 11.1847, humidity: 10, units: { speed: 'mph' }
+      }).AAT()).be.approximately(13.27, 0.01);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -124,6 +160,10 @@ describe('Feels() - class methods', () => {
   describe('.windChill()', () => {
     it('should be approximately -33.55', () => {
       should(new Feels({ temp: -20, speed: 10 }).windChill()).be.approximately(-33.55, 0.01);
+    });
+
+    it('should be equal -34', () => {
+      should(new Feels({ temp: -20, speed: 10, round: true }).windChill()).be.eql(-34);
     });
 
     it('should be approximately -15.54', () => {

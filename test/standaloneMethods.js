@@ -8,11 +8,19 @@ const Feels = require('../main');
 describe('Feels - standalone methods', () => {
   describe('.heatIndex()', () => {
     it('should be approximately 24.12', () => {
-      should(Feels.heatIndex(20, 18, true)).be.approximately(24.12, 0.01);
+      should(Feels.heatIndex(20, 18, { dewPoint: true })).be.approximately(24.12, 0.01);
+    });
+
+    it('should be equal 24', () => {
+      should(Feels.heatIndex(20, 18, { dewPoint: true, round: true })).be.eql(24);
     });
 
     it('should be approximately 19.03', () => {
       should(Feels.heatIndex(20, 10)).be.approximately(19.03, 0.01);
+    });
+
+    it('should be equal 19', () => {
+      should(Feels.heatIndex(20, 10, { round: Math.floor })).be.eql(19);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -35,11 +43,19 @@ describe('Feels - standalone methods', () => {
 
   describe('.AWBGT()', () => {
     it('should be approximately 23.45', () => {
-      should(Feels.AWBGT(20, 18, true)).be.approximately(23.45, 0.01);
+      should(Feels.AWBGT(20, 18, { dewPoint: true })).be.approximately(23.45, 0.01);
+    });
+
+    it('should be equal 23', () => {
+      should(Feels.AWBGT(20, 18, { dewPoint: true, round: true })).be.eql(23);
     });
 
     it('should be approximately 16.19', () => {
       should(Feels.AWBGT(20, 10)).be.approximately(16.19, 0.01);
+    });
+
+    it('should be equal 16', () => {
+      should(Feels.AWBGT(20, 10, { round: Math.floor })).be.eql(16);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -62,11 +78,19 @@ describe('Feels - standalone methods', () => {
 
   describe('.humidex()', () => {
     it('should be approximately 26', () => {
-      should(Feels.humidex(20, 18, true)).be.approximately(26, 0.01);
+      should(Feels.humidex(20, 18, { dewPoint: true })).be.approximately(26, 0.01);
+    });
+
+    it('should be equal 26', () => {
+      should(Feels.humidex(20, 18, { dewPoint: true, round: true })).be.eql(26);
     });
 
     it('should be approximately 15.74', () => {
       should(Feels.humidex(20, 10)).be.approximately(15.74, 0.01);
+    });
+
+    it('should be equal 15', () => {
+      should(Feels.humidex(20, 10, { round: Math.floor })).be.eql(15);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -89,11 +113,19 @@ describe('Feels - standalone methods', () => {
 
   describe('.AAT()', () => {
     it('should be approximately 22.86', () => {
-      should(Feels.AAT(20, 0, 18, true)).be.approximately(22.86, 0.01);
+      should(Feels.AAT(20, 0, 18, { dewPoint: true })).be.approximately(22.86, 0.01);
+    });
+
+    it('should be equal 23', () => {
+      should(Feels.AAT(20, 0, 18, { dewPoint: true, round: true })).be.eql(23);
     });
 
     it('should be approximately 16.76', () => {
       should(Feels.AAT(20, 0, 10)).be.approximately(16.76, 0.01);
+    });
+
+    it('should be equal 16', () => {
+      should(Feels.AAT(20, 0, 10, { round: Math.floor })).be.eql(16);
     });
 
     it('should be approximately 13.27', () => {
@@ -124,8 +156,16 @@ describe('Feels - standalone methods', () => {
       should(Feels.windChill(-20, 10)).be.approximately(-33.55, 0.01);
     });
 
+    it('should be equal -34', () => {
+      should(Feels.windChill(-20, 10, { round: true })).be.eql(-34);
+    });
+
     it('should be approximately -15.54', () => {
       should(Feels.windChill(-10, 3)).be.approximately(-15.54, 0.01);
+    });
+
+    it('should be equal -16', () => {
+      should(Feels.windChill(-10, 3, { round: Math.floor })).be.eql(-16);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -149,6 +189,10 @@ describe('Feels - standalone methods', () => {
       should(Feels.getWVP(20, 10)).be.approximately(2.33, 0.01);
     });
 
+    it('should be equal 2.33', () => {
+      should(Feels.getWVP(20, 10, { round: true })).be.eql(2);
+    });
+
     it('should throw when one of the required arguments are not specified', () => {
       should(() => Feels.getWVP()).throw('One of the required arguments are not specified');
       should(() => Feels.getWVP(20)).throw('One of the required arguments are not specified');
@@ -166,6 +210,10 @@ describe('Feels - standalone methods', () => {
       should(Feels.getWVPbyDP(18)).be.approximately(20.81, 0.01);
     });
 
+    it('should be equal 21', () => {
+      should(Feels.getWVPbyDP(18, { round: true })).be.eql(21);
+    });
+
     it('should throw when dew point is not specified', () => {
       should(() => Feels.getWVPbyDP()).throw('Dew point is not specified');
     });
@@ -174,6 +222,10 @@ describe('Feels - standalone methods', () => {
   describe('.getARH()', () => {
     it('should be equal 90', () => {
       should(Feels.getARH(20, 18)).be.eql(90);
+    });
+
+    it('should be equal 90', () => {
+      should(Feels.getARH(20, 18, { round: true })).be.eql(90);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -186,11 +238,19 @@ describe('Feels - standalone methods', () => {
 
   describe('.getRH()', () => {
     it('should be approximately 52.74', () => {
-      should(Feels.getRH(20, 10, true)).be.approximately(52.74, 0.01);
+      should(Feels.getRH(20, 10, { dewPoint: true })).be.approximately(52.74, 0.01);
+    });
+
+    it('should be equal 53', () => {
+      should(Feels.getRH(20, 10, { dewPoint: true, round: true })).be.eql(53);
     });
 
     it('should be approximately 89.23', () => {
       should(Feels.getRH(20, 20.81)).be.approximately(89.23, 0.01);
+    });
+
+    it('should be equal 89', () => {
+      should(Feels.getRH(20, 20.81, { round: Math.floor })).be.eql(89);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -208,6 +268,10 @@ describe('Feels - standalone methods', () => {
       should(Feels.getADP(20, 10)).be.eql(2);
     });
 
+    it('should be equal 2', () => {
+      should(Feels.getADP(20, 10, { round: true })).be.eql(2);
+    });
+
     it('should throw when one of the required arguments are not specified', () => {
       should(() => Feels.getADP()).throw('One of the required arguments are not specified');
       should(() => Feels.getADP(20)).throw('One of the required arguments are not specified');
@@ -223,6 +287,10 @@ describe('Feels - standalone methods', () => {
   describe('.getDP()', () => {
     it('should be approximately -12.57', () => {
       should(Feels.getDP(20, 10)).be.approximately(-12.57, 0.01);
+    });
+
+    it('should be equal -13', () => {
+      should(Feels.getDP(20, 10, { round: true })).be.eql(-13);
     });
 
     it('should throw when one of the required arguments are not specified', () => {
@@ -246,6 +314,10 @@ describe('Feels - standalone methods', () => {
       should(Feels.getFP(-40, 80)).be.approximately(-42.14, 0.01);
     });
 
+    it('should be equal -42', () => {
+      should(Feels.getFP(-40, 80, { round: true })).be.eql(-42);
+    });
+
     it('should throw when one of the required arguments are not specified', () => {
       should(() => Feels.getFP()).throw('One of the required arguments are not specified');
       should(() => Feels.getFP(20)).throw('One of the required arguments are not specified');
@@ -265,6 +337,7 @@ describe('Feels - standalone methods', () => {
   describe('.tempConvert()', () => {
     it('should be equal 68', () => {
       should(Feels.tempConvert(68, 'f', 'f')).be.eql(68);
+      should(Feels.tempConvert(68.3, 'f', 'f', true)).be.eql(68);
       should(Feels.tempConvert(20, 'c', 'f')).be.eql(68);
       should(Feels.tempConvert(293.15, 'k', 'f')).be.eql(68);
     });
@@ -294,6 +367,7 @@ describe('Feels - standalone methods', () => {
   describe('.speedConvert()', () => {
     it('should be equal 18', () => {
       should(Feels.speedConvert(18, 'kph', 'kph')).be.eql(18);
+      should(Feels.speedConvert(18.3, 'kph', 'kph', true)).be.eql(18);
       should(Feels.speedConvert(5, 'mps', 'kph')).be.eql(18);
       should(Feels.speedConvert(11.1847, 'mph', 'kph')).be.approximately(18, 0.01);
     });
@@ -308,6 +382,7 @@ describe('Feels - standalone methods', () => {
       should(Feels.speedConvert(5, 'mps', 'mps')).be.eql(5);
       should(Feels.speedConvert(18, 'kph', 'mps')).be.eql(5);
       should(Feels.speedConvert(11.1847, 'mph', 'mps')).be.approximately(5, 0.01);
+      should(Feels.speedConvert(11.1847, 'mph', 'mps', Math.floor)).be.eql(5);
     });
 
     it('should throw when speed is not specified', () => {

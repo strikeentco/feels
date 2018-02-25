@@ -1,6 +1,6 @@
 feels [![License](https://img.shields.io/npm/l/feels.svg)](https://github.com/strikeentco/feels/blob/master/LICENSE)  [![npm](https://img.shields.io/npm/v/feels.svg)](https://www.npmjs.com/package/feels)
 ==========
-[![Build Status](https://travis-ci.org/strikeentco/feels.svg)](https://travis-ci.org/strikeentco/feels)  [![node](https://img.shields.io/node/v/feels.svg)](https://www.npmjs.com/package/feels) [![Test Coverage](https://codeclimate.com/github/strikeentco/feels/badges/coverage.svg)](https://codeclimate.com/github/strikeentco/feels/coverage) [![bitHound Score](https://www.bithound.io/github/strikeentco/feels/badges/score.svg)](https://www.bithound.io/github/strikeentco/feels)
+[![Build Status](https://travis-ci.org/strikeentco/feels.svg)](https://travis-ci.org/strikeentco/feels)  [![node](https://img.shields.io/node/v/feels.svg)](https://www.npmjs.com/package/feels) [![Test Coverage](https://api.codeclimate.com/v1/badges/8db75e23fd57ba5ee971/test_coverage)](https://codeclimate.com/github/strikeentco/feels/test_coverage) [![bitHound Score](https://www.bithound.io/github/strikeentco/feels/badges/score.svg)](https://www.bithound.io/github/strikeentco/feels)
 
 `Feels` allow you to calculate [apparent temperature](https://en.wikipedia.org/wiki/Apparent_temperature) using [heat index](https://en.wikipedia.org/wiki/Heat_index), approximate [wet-bulb globe temperature](https://en.wikipedia.org/wiki/Wet-bulb_globe_temperature), [humidex](https://en.wikipedia.org/wiki/Humidex), [australian apparent temperature](https://en.wikipedia.org/wiki/Wind_chill#Australian_Apparent_Temperature) and [wind chill](https://en.wikipedia.org/wiki/Wind_chill).
 
@@ -81,6 +81,7 @@ Constructor.
   * **speed** (*Float*) - Wind speed in meters per second, miles per hour or kilometers per hour, depends on units type.
   * **dewPoint** (*Float*) - Dew point in `Celsius`, `Fahrenheit`, `Kelvin` depends on units type.
   * **wvp** (*Float*) - Water vapour pressure in `hPa`.
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
   * **units** (*Object*) - Units type:
     * **temp** (*String*) - `c`, `f`, `k` (by default `c`).
     * **speed** (*String*) - `mps`, `mph`, `kph` (by default `mps`).
@@ -102,6 +103,7 @@ Sets the options.
   * **speed** (*Float*) - Wind speed in meters per second, miles per hour or kilometers per hour, depends on units type.
   * **dewPoint** (*Float*) - Dew point in `Celsius`, `Fahrenheit`, `Kelvin` depends on units type.
   * **wvp** (*Float*) - Water vapour pressure in `hPa`.
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
   * **units** (*Object*) - Units type:
     * **temp** (*String*) - `c`, `f`, `k` (by default `c`).
     * **speed** (*String*) - `mps`, `mph`, `kph` (by default `mps`).
@@ -292,12 +294,13 @@ Feels.humidex(20, 80.9);
 
 ## Temperature convert
 
-### Feels.tempConvert(temp, from, to)
+### Feels.tempConvert(temp, from, to, round)
 
 #### Params:
 * **temp** (*Float*) - Temperature.
 * **from** (*String*) - `c` - Celsius, `f` - Fahrenheit, `k` - Kelvin.
 * **to** (*String*) - `c` - Celsius, `f` - Fahrenheit, `k` - Kelvin.
+* **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ```javascript
 const Feels = require('feels');
@@ -308,12 +311,13 @@ Feels.tempConvert(humidex, 'c', 'f');
 
 ## Speed convert
 
-### Feels.speedConvert(speed, from, to)
+### Feels.speedConvert(speed, from, to, round)
 
 #### Params:
 * **speed** (*Float*) - Speed.
 * **from** (*String*) - `mps` - Metre per second, `mph` - Miles per hour, `kph` - Kilometre per hour.
 * **to** (*String*) - `mps` - Metre per second, `mph` - Miles per hour, `kph` - Kilometre per hour.
+* **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ```javascript
 const Feels = require('feels');
@@ -328,18 +332,14 @@ The heat index is an index that combines air temperature and relative humidity i
 
 **Note:** *The heat index is used for temperatures more than 20 Celsius.*
 
-### Feels.heatIndex(temp, humidity)
+### Feels.heatIndex(temp, humidity|dewPoint, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
-* **humidity** (*Integer*) - Humidity in percent (0 > humidity <= 100).
-
-### Feels.heatIndex(temp, dewPoint, true)
-
-#### Params:
-* **temp** (*Float*) - Temperature in Celsius.
-* **dewPoint** (*Float*) - Dew point in Celsius.
-* **true** (*True*) - Must be `true` for dew point usage.
+* **humidity|dewPoint** (*Float*) - Humidity in percent (0 > humidity <= 100) or Dew point in Celsius.
+* **[options]** (*Object*) - Object with options:
+  * **dewPoint** (*True*) - Must be `true` for dew point usage.
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Approximate WBGT
 
@@ -347,18 +347,14 @@ The approximate wet-bulb globe temperature is a composite temperature used to es
 
 **Note:** *The AWBGT is used for temperatures more than 15 Celsius.*
 
-### Feels.AWBGT(temp, humidity)
+### Feels.AWBGT(temp, humidity|dewPoint, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
-* **humidity** (*Integer*) - Humidity in percent (0 > humidity <= 100).
-
-### Feels.AWBGT(temp, dewPoint, true)
-
-#### Params:
-* **temp** (*Float*) - Temperature in Celsius.
-* **dewPoint** (*Float*) - Dew point in Celsius.
-* **true** (*True*) - Must be `true` for dew point usage.
+* **humidity|dewPoint** (*Float*) - Humidity in percent (0 > humidity <= 100) or Dew point in Celsius.
+* **[options]** (*Object*) - Object with options:
+  * **dewPoint** (*True*) - Must be `true` for dew point usage.
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Humidex
 
@@ -366,37 +362,28 @@ The humidex is an index number used by Canadian meteorologists to describe how h
 
 **Note:** *The humidex is used for temperatures more than 0 Celsius.*
 
-### Feels.humidex(temp, humidity)
+### Feels.humidex(temp, humidity|dewPoint, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
-* **humidity** (*Integer*) - Humidity in percent (0 > humidity <= 100).
-
-### Feels.humidex(temp, dewPoint, true)
-
-#### Params:
-* **temp** (*Float*) - Temperature in Celsius.
-* **dewPoint** (*Float*) - Dew point in Celsius.
-* **true** (*True*) - Must be `true` for dew point usage.
+* **humidity|dewPoint** (*Float*) - Humidity in percent (0 > humidity <= 100) or Dew point in Celsius.
+* **[options]** (*Object*) - Object with options:
+  * **dewPoint** (*True*) - Must be `true` for dew point usage.
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Australian Apparent Temperature
 
 The AAT is an index number used by the Australian Bureau of Meteorology to describe heat balance in the human body. [Wiki](https://en.wikipedia.org/wiki/Wind_chill#Australian_Apparent_Temperature)
 
-### Feels.AAT(temp, speed, humidity)
+### Feels.AAT(temp, speed, humidity|dewPoint, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
 * **speed** (*Float*) - Speed in meters per second.
-* **humidity** (*Integer*) - Humidity in percent (0 > humidity <= 100).
-
-### Feels.AAT(temp, speed, dewPoint, true)
-
-#### Params:
-* **temp** (*Float*) - Temperature in Celsius.
-* **speed** (*Float*) - Speed in meters per second.
-* **dewPoint** (*Float*) - Dew point in Celsius.
-* **true** (*True*) - Must be `true` for dew point usage.
+* **humidity|dewPoint** (*Float*) - Humidity in percent (0 > humidity <= 100) or Dew point in Celsius.
+* **[options]** (*Object*) - Object with options:
+  * **dewPoint** (*True*) - Must be `true` for dew point usage.
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Wind chill
 
@@ -404,73 +391,83 @@ Wind chill is the perceived decrease in air temperature felt by the body on expo
 
 **Note:** *The humidex is used for temperatures less than 0 Celsius.*
 
-### Feels.windChill(temp, speed)
+### Feels.windChill(temp, speed, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
 * **speed** (*Float*) - Speed in meters per second.
+* **[options]** (*Object*) - Object with options:
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Water vapour pressure
 
-### Feels.getWVP(temp, humidity)
+### Feels.getWVP(temp, humidity, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
 * **humidity** (*Integer*) - Humidity in percent (0 > humidity <= 100).
+* **[options]** (*Object*) - Object with options:
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
-### Feels.getWVPbyDP(dewPoint)
+### Feels.getWVPbyDP(dewPoint, [options])
 
 #### Params:
 * **dewPoint** (*Float*) - Dew point in Celsius.
+* **[options]** (*Object*) - Object with options:
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Approximate relative humidity
 
-### Feels.getARH(temp, dewPoint)
+### Feels.getARH(temp, dewPoint, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
 * **dewPoint** (*Float*) - Dew point in Celsius.
+* **[options]** (*Object*) - Object with options:
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Relative humidity
 
-### Feels.getRH(temp, WVP)
+### Feels.getRH(temp, WVP|dewPoint, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
-* **WVP** (*Float*) - Water vapour pressure.
-
-### Feels.getRH(temp, dewPoint, true)
-
-#### Params:
-* **temp** (*Float*) - Temperature in Celsius.
-* **dewPoint** (*Float*) - Dew point in Celsius.
-* **true** (*True*) - Must be `true` for dew point usage.
+* **WVP|dewPoint** (*Float*) - Water vapour pressure or Dew point in Celsius.
+* **[options]** (*Object*) - Object with options:
+  * **dewPoint** (*True*) - Must be `true` for dew point usage.
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Approximate dew point
 
-### Feels.getADP(temp, humidity)
+### Feels.getADP(temp, humidity, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
 * **humidity** (*Integer*) - Humidity in percent (0 > humidity <= 100).
+* **[options]** (*Object*) - Object with options:
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Dew point
 
-### Feels.getDP(temp, humidity)
+### Feels.getDP(temp, humidity, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
 * **humidity** (*Integer*) - Humidity in percent (0 > humidity <= 100).
+* **[options]** (*Object*) - Object with options:
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## Frost point
 
-### Feels.getFP(temp, humidity)
+### Feels.getFP(temp, humidity, [options])
 
 #### Params:
 * **temp** (*Float*) - Temperature in Celsius.
 * **humidity** (*Integer*) - Humidity in percent (0 > humidity <= 100).
+* **[options]** (*Object*) - Object with options:
+  * **round** (*Boolean|Function*) - The function that will be used to round the result. If `true`, rounds the result using `Math.round`.
 
 ## License
 
 The MIT License (MIT)<br/>
-Copyright (c) 2015-2016 Alexey Bystrov
+Copyright (c) 2015-2018 Alexey Bystrov
